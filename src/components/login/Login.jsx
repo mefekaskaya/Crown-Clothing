@@ -1,10 +1,11 @@
 import React, { Component } from "react";
+import { withRouter } from "react-router-dom";
 import FormInput from "../formInput/FormInput";
 import CustomButton from "../customButton/CustomButton";
 import { auth, signInWithGoogle } from "../../firebase/firebase.utils";
 import "./Login.scss";
 
-export default class Login extends Component {
+class Login extends Component {
   constructor(props) {
     super(props);
 
@@ -22,6 +23,7 @@ export default class Login extends Component {
     try {
       await auth.signInWithEmailAndPassword(email, password);
       this.setState({ email: "", password: "" });
+      this.props.history.push("/");
     } catch (error) {
       console.log(error);
     }
@@ -67,3 +69,5 @@ export default class Login extends Component {
     );
   }
 }
+
+export default withRouter(Login);
