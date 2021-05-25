@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { Switch, Route } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Switch, Route, Redirect } from "react-router-dom";
 import "./App.css";
 
 import HomePage from "./pages/homePage/HomePage.jsx";
@@ -12,6 +12,7 @@ import { setCurrentUser } from "./redux/actions/user";
 
 function App() {
   const dispatch = useDispatch();
+  const currentUser = useSelector((state) => state.user.currentUser);
 
   const changeCurrentUser = (user) => dispatch(setCurrentUser(user));
 
@@ -42,7 +43,13 @@ function App() {
       <Switch>
         <Route exact path="/" component={HomePage} />
         <Route path="/shop" component={ShopPage} />
-        <Route path="/login" component={LoginAndRegisterPage} />
+        <Route
+          exact
+          path="/login"
+          render={() =>
+            currentUser ? <Redirect to="/" /> : <LoginAndRegisterPage />
+          }
+        />
       </Switch>
     </div>
   );
