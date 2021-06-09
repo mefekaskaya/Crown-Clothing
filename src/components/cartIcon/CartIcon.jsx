@@ -6,10 +6,9 @@ import "./CartIcon.scss";
 
 export default function CartIcon() {
   const dispatch = useDispatch();
-  const toggleCart = () => dispatch(toggleCartHidden());
 
   return (
-    <div className="cart-icon" onClick={toggleCart}>
+    <div className="cart-icon" onClick={() => dispatch(toggleCartHidden())}>
       <ShoppingIcon className="shopping-icon" />
       <span className="item-count">0</span>
     </div>
