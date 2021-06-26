@@ -9,10 +9,11 @@ import LoginAndRegisterPage from "./pages/loginAndRegisterPage/LoginAndRegisterP
 import Header from "./components/header/Header.jsx";
 import { auth, createUserProfileDocument } from "./firebase/firebase.utils";
 import { setCurrentUser } from "./redux/actions/user";
+import { selectCurrentUser } from "./redux/selectors/user";
 
 function App() {
   const dispatch = useDispatch();
-  const currentUser = useSelector((state) => state.user.currentUser);
+  const currentUser = useSelector(selectCurrentUser);
 
   const changeCurrentUser = (user) => dispatch(setCurrentUser(user));
 
