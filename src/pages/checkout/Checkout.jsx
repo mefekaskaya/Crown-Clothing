@@ -1,8 +1,10 @@
 import React from "react";
 import { useSelector } from "react-redux";
+
 import { selectCartItems, selectCartTotal } from "../../redux/selectors/cart";
 import CheckoutItem from "../../components/checkoutItem/CheckoutItem";
-import "./CheckoutPage.scss";
+
+import "./Checkout.scss";
 
 export default function CheckoutPage() {
   const cartItems = useSelector(selectCartItems);

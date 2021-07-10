@@ -3,10 +3,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { Switch, Route, Redirect } from "react-router-dom";
 import "./App.css";
 
-import HomePage from "./pages/homePage/HomePage.jsx";
-import ShopPage from "./pages/shop/Shop.jsx";
-import LoginAndRegisterPage from "./pages/loginAndRegisterPage/LoginAndRegisterPage.jsx";
-import CheckoutPage from "./pages/checkoutPage/CheckoutPage.jsx";
+import Home from "./pages/home/Home.jsx";
+import Shop from "./pages/shop/Shop.jsx";
+import LoginAndRegister from "./pages/loginAndRegister/LoginAndRegister.jsx";
+import Checkout from "./pages/checkout/Checkout.jsx";
 
 import Header from "./components/header/Header.jsx";
 
@@ -46,14 +46,14 @@ function App() {
     <div>
       <Header />
       <Switch>
-        <Route exact path="/" component={HomePage} />
-        <Route path="/shop" component={ShopPage} />
-        <Route exact path="/checkout" component={CheckoutPage} />
+        <Route exact path="/" component={Home} />
+        <Route path="/shop" component={Shop} />
+        <Route exact path="/checkout" component={Checkout} />
         <Route
           exact
           path="/login"
           render={() =>
-            currentUser ? <Redirect to="/" /> : <LoginAndRegisterPage />
+            currentUser ? <Redirect to="/" /> : <LoginAndRegister />
           }
         />
       </Switch>
