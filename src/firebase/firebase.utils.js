@@ -44,6 +44,19 @@ if (!firebase.apps.length) {
   firebase.app();
 }
 
+export const addCollectionsAndDocuments = async (
+  collectionKey,
+  objectsToAdd
+) => {
+  const collectionRef = firestore.collection(collectionKey);
+  const batch = firestore.batch();
+  objectsToAdd.forEach((object) => {
+    const newDocRef = collectionRef.doc();
+    batch.set(newDocRef, object);
+  });
+  return await batch.commit();
+};
+
 export const auth = firebase.auth();
 export const firestore = firebase.firestore();
 
