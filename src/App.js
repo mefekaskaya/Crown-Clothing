@@ -10,20 +10,14 @@ import Checkout from "./pages/checkout/Checkout.jsx";
 
 import Header from "./components/header/Header.jsx";
 
-import {
-  auth,
-  createUserProfileDocument,
-  addCollectionsAndDocuments,
-} from "./firebase/firebase.utils";
+import { auth, createUserProfileDocument } from "./firebase/firebase.utils";
 
 import { setCurrentUser } from "./redux/actions/user";
 import { selectCurrentUser } from "./redux/selectors/user";
-import { selectCollectionsPreview } from "./redux/selectors/shop";
 
 function App() {
   const dispatch = useDispatch();
   const currentUser = useSelector(selectCurrentUser);
-  const collectionsArray = useSelector(selectCollectionsPreview);
 
   const changeCurrentUser = (user) => dispatch(setCurrentUser(user));
 
@@ -40,10 +34,6 @@ function App() {
         });
       }
       changeCurrentUser(userAuth);
-      addCollectionsAndDocuments(
-        "collections",
-        collectionsArray.map(({ title, items }) => ({ title, items }))
-      );
     });
 
     return () => {

@@ -44,17 +44,20 @@ if (!firebase.apps.length) {
   firebase.app();
 }
 
-export const addCollectionsAndDocuments = async (
-  collectionKey,
-  objectsToAdd
-) => {
-  const collectionRef = firestore.collection(collectionKey);
-  const batch = firestore.batch();
-  objectsToAdd.forEach((object) => {
-    const newDocRef = collectionRef.doc();
-    batch.set(newDocRef, object);
+export const convertCollectionSnapshotToMap = (collections) => {
+  const transformCollection = collections.docs.map((doc) => {
+    const { title, items } = doc.data();
+    return {
+      routeName: encodeURI(title.toLowerCase()),
+      id: doc.id,
+      title,
+      items,
+    };
   });
-  return await batch.commit();
+  return transformCollection.reduce((acc, collection) => {
+    acc[collection.title.toLowerCase()] = collection;
+    return acc;
+  }, {});
 };
 
 export const auth = firebase.auth();
