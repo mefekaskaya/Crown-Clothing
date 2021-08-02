@@ -1,14 +1,23 @@
 import React, { useState } from "react";
+import { useDispatch } from 'react-redux';
+
 import FormInput from "../formInput/FormInput";
 import CustomButton from "../customButton/CustomButton";
-import { auth, createUserProfileDocument } from "../../firebase/firebase.utils";
+import { registerStart } from "../../redux/actions/user";
+
 import "./Register.scss";
 
 export default function Register() {
-  const [displayName, setDisplayName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const dispatch = useDispatch();
+
+  const [userCredentials,setUserCredentials] = useState({
+    displayName: '',
+    email: '',
+    password: '',
+    confirmPassword: ''
+  })
+
+  const { displayName, email, password, confirmPassword } = userCredentials;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -17,40 +26,12 @@ export default function Register() {
       alert("password don't match");
       return;
     }
-
-    try {
-      const { user } = await auth.createUserWithEmailAndPassword(
-        email,
-        password
-      );
-      await createUserProfileDocument(user, { displayName });
-      setDisplayName("");
-      setEmail("");
-      setPassword("");
-      setConfirmPassword("");
-    } catch (error) {
-      console.error(error);
-    }
+    dispatch(registerStart({ displayName, email, password }));
   };
 
-  const handleChangeDisplayName = (e) => {
-    const { value } = e.target;
-    setDisplayName(value);
-  };
-
-  const handleChangeEmail = (e) => {
-    const { value } = e.target;
-    setEmail(value);
-  };
-
-  const handleChangePassword = (e) => {
-    const { value } = e.target;
-    setPassword(value);
-  };
-
-  const handleChangeConfirmPassword = (e) => {
-    const { value } = e.target;
-    setConfirmPassword(value);
+  const handleChange = (e) => {
+    const { value, name } = e.target;
+    setUserCredentials({...userCredentials, [name]: value });
   };
 
   return (
@@ -62,7 +43,7 @@ export default function Register() {
           type="text"
           name="displayName"
           value={displayName}
-          onChange={handleChangeDisplayName}
+          onChange={handleChange}
           label="Display Name"
           required
         />
@@ -70,7 +51,7 @@ export default function Register() {
           type="email"
           name="email"
           value={email}
-          onChange={handleChangeEmail}
+          onChange={handleChange}
           label="Email"
           required
         />
@@ -78,7 +59,7 @@ export default function Register() {
           type="password"
           name="password"
           value={password}
-          onChange={handleChangePassword}
+          onChange={handleChange}
           label="Password"
           required
         />
@@ -86,7 +67,7 @@ export default function Register() {
           type="password"
           name="confirmPassword"
           value={confirmPassword}
-          onChange={handleChangeConfirmPassword}
+          onChange={handleChange}
           label="Confirm Password"
           required
         />

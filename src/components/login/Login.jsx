@@ -1,73 +1,64 @@
-import React, { Component } from "react";
-import { withRouter } from "react-router-dom";
+import React, { useState } from "react";
+import { useDispatch } from 'react-redux';
+
 import FormInput from "../formInput/FormInput";
 import CustomButton from "../customButton/CustomButton";
-import { auth, signInWithGoogle } from "../../firebase/firebase.utils";
+
+import { googleLoginStart, emailLoginStart } from '../../redux/actions/user';
+
 import "./Login.scss";
 
-class Login extends Component {
-  constructor(props) {
-    super(props);
+export default function Login() {
+  const dispatch = useDispatch();
+  
+  const [userCredentials,setUserCredentials] = useState({
+    email: '',
+    password: ''
+  })
 
-    this.state = {
-      email: "",
-      password: "",
-    };
-  }
+  const { email, password } = userCredentials;
 
-  handleSubmit = async (e) => {
-    e.preventDefault();
-
-    const { email, password } = this.state;
-
-    try {
-      await auth.signInWithEmailAndPassword(email, password);
-      this.setState({ email: "", password: "" });
-      this.props.history.push("/");
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  handleChange = (e) => {
+  const handleChange = (e) => {
     const { value, name } = e.target;
-    this.setState({ [name]: value });
+    setUserCredentials({...userCredentials, [name]: value });
   };
-  render() {
-    return (
-      <div>
-        <div className="login">
-          <h2>I already have an account</h2>
-          <span>Login with your email and password</span>
 
-          <form onSubmit={this.handleSubmit}>
-            <FormInput
-              name="email"
-              type="email"
-              value={this.state.email}
-              handleChange={this.handleChange}
-              label="email"
-              required
-            />
-            <FormInput
-              name="password"
-              type="password"
-              label="password"
-              value={this.state.password}
-              handleChange={this.handleChange}
-              required
-            />
-            <div className="buttons">
-              <CustomButton type="submit">Login</CustomButton>
-              <CustomButton onClick={signInWithGoogle} isGoogleLogin>
-                Login with Google
-              </CustomButton>
-            </div>
-          </form>
-        </div>
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    dispatch(emailLoginStart({email, password}));
+  };
+
+  return (
+    <div>
+      <div className="login">
+        <h2>I already have an account</h2>
+        <span>Login with your email and password</span>
+
+        <form onSubmit={handleSubmit}>
+          <FormInput
+            name="email"
+            type="email"
+            value={email}
+            handleChange={handleChange}
+            label="email"
+            required
+          />
+          <FormInput
+            name="password"
+            type="password"
+            label="password"
+            value={password}
+            handleChange={handleChange}
+            required
+          />
+          <div className="buttons">
+            <CustomButton type="submit">Login</CustomButton>
+            <CustomButton type='button' onClick={() => dispatch(googleLoginStart())} isGoogleLogin>
+              Login with Google
+            </CustomButton>
+          </div>
+        </form>
       </div>
-    );
-  }
+    </div>
+  );
 }
-
-export default withRouter(Login);

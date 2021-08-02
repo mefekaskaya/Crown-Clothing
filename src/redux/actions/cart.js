@@ -18,3 +18,7 @@ export const clearItemFromCart = (item) => ({
   type: actionTypes.CLEAR_ITEM_FROM_CART,
   payload: item,
 });
+
+export const clearCart = () => ({
+  type: actionTypes.CLEAR_CART
+});

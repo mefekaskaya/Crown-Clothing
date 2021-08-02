@@ -10,35 +10,15 @@ import Checkout from "./pages/checkout/Checkout.jsx";
 
 import Header from "./components/header/Header.jsx";
 
-import { auth, createUserProfileDocument } from "./firebase/firebase.utils";
-
-import { setCurrentUser } from "./redux/actions/user";
 import { selectCurrentUser } from "./redux/selectors/user";
+import { checkUserSession } from './redux/actions/user';
 
 function App() {
   const dispatch = useDispatch();
   const currentUser = useSelector(selectCurrentUser);
-
-  const changeCurrentUser = (user) => dispatch(setCurrentUser(user));
-
+  
   useEffect(() => {
-    const unsubscribeFromAuth = auth.onAuthStateChanged(async (userAuth) => {
-      if (userAuth) {
-        const userRef = await createUserProfileDocument(userAuth);
-
-        userRef.onSnapshot((snapShot) => {
-          changeCurrentUser({
-            id: snapShot.id,
-            ...snapShot.data(),
-          });
-        });
-      }
-      changeCurrentUser(userAuth);
-    });
-
-    return () => {
-      unsubscribeFromAuth();
-    };
+    dispatch(checkUserSession());
   }, []);
 
   return (
