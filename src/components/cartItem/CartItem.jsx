@@ -1,7 +1,7 @@
-import React from "react";
+import React, { memo } from "react";
 import "./CartItem.scss";
 
-export default function CartItem({
+function CartItem({
   item: { imageUrl, price, name, quantity },
 }) {
   return (
@@ -16,3 +16,5 @@ export default function CartItem({
     </div>
   );
 }
+
+export default memo(CartItem);
