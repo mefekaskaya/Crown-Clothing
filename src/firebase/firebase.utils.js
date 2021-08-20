@@ -1,15 +1,15 @@
-import firebase from "firebase/app";
-import "firebase/firestore";
-import "firebase/auth";
+import firebase from 'firebase/app';
+import 'firebase/firestore';
+import 'firebase/auth';
 
 const config = {
-  apiKey: "AIzaSyBUHpLCucyXiJey_Y81jLMn-37IlBhFnPA",
-  authDomain: "e-commerce-db-53312.firebaseapp.com",
-  projectId: "e-commerce-db-53312",
-  storageBucket: "e-commerce-db-53312.appspot.com",
-  messagingSenderId: "514911805605",
-  appId: "1:514911805605:web:ba59d9ddcf157e9561ed4c",
-  measurementId: "G-V143Y06YLM",
+  apiKey: 'AIzaSyBUHpLCucyXiJey_Y81jLMn-37IlBhFnPA',
+  authDomain: 'e-commerce-db-53312.firebaseapp.com',
+  projectId: 'e-commerce-db-53312',
+  storageBucket: 'e-commerce-db-53312.appspot.com',
+  messagingSenderId: '514911805605',
+  appId: '1:514911805605:web:ba59d9ddcf157e9561ed4c',
+  measurementId: 'G-V143Y06YLM',
 };
 
 export const createUserProfileDocument = async (userAuth, additionalData) => {
@@ -31,7 +31,7 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
         ...additionalData,
       });
     } catch (error) {
-      console.log("error creating user", error.message);
+      console.log('error creating user', error.message);
     }
   }
 
@@ -69,11 +69,25 @@ export const getCurrentUser = () => {
   });
 };
 
+export const getUserCart = async userId => {
+  const cartsRef = firestore.collection('carts').where('userId', '==', userId);
+
+  const snapshot = await cartsRef.get();
+  
+  if(snapshot.empty) {
+    const cartDocRef = firestore.collection('carts').doc();
+    await cartDocRef.set({ userId, cartItems: [] });
+    return cartDocRef;
+  } else {
+    return snapshot.docs[0].ref;
+  }
+}; 
+
 export const auth = firebase.auth();
 export const firestore = firebase.firestore();
 
 export const provider = new firebase.auth.GoogleAuthProvider();
-provider.setCustomParameters({ prompt: "select_account" });
+provider.setCustomParameters({ prompt: 'select_account' });
 export const signInWithGoogle = () => auth.signInWithPopup(provider);
 
 export default firebase;
