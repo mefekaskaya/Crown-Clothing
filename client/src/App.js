@@ -9,12 +9,14 @@ import Header from "./components/header/Header.jsx";
 import { selectCurrentUser } from "./redux/selectors/user";
 import { checkUserSession } from './redux/actions/user';
 
+import './Global.scss';
+
 const Home = lazy(() => import("./pages/home/Home.jsx"));
 const Shop = lazy(() => import("./pages/shop/Shop.jsx"));
 const LoginAndRegister = lazy(() => import("./pages/loginAndRegister/LoginAndRegister.jsx"));
 const Checkout = lazy(() => import("./pages/checkout/Checkout.jsx"));
 
-import './Global.scss';
+
 
 function App() {
   const dispatch = useDispatch();
